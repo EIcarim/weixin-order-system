@@ -3,18 +3,21 @@ package com.hmtech.enums;
 import lombok.Getter;
 
 /**
- * 商品状态信息
+ * 订单状态信息
  */
 @Getter
-public enum ProductStatusEnum {
+public enum OrderStatusEnum {
 
-    UP(0, "在架"),
-    DOWN(1, "下架");
+    NEW(0,"新订单"),
+    FINISHED(1, "完结"),
+    CANCEL(2,"取消")
+    ;
 
     private Integer status;
+
     private String msg;
 
-    ProductStatusEnum(Integer status, String msg) {
+    OrderStatusEnum(Integer status, String msg) {
         this.status = status;
         this.msg = msg;
     }

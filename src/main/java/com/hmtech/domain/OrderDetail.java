@@ -1,8 +1,6 @@
 package com.hmtech.domain;
 
-import com.hmtech.enums.ProductStatusEnum;
 import lombok.Data;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -10,29 +8,26 @@ import javax.persistence.Table;
 import java.math.BigDecimal;
 
 /**
- * 商品信息对象
+ * 订单细节表
  */
 @Entity
+@Table(name = "order_detail")
 @Data
-@DynamicUpdate
-@Table(name = "product_info")
-public class ProductInfo {
+public class OrderDetail {
 
     @Id
+    private String detailId;
+
+    private String orderId;
+
     private String productId;
 
     private String productName;
 
     private BigDecimal productPrice;
 
-    private Integer productStock;
-
-    private String productDescription;
+    private Integer productQuantity;
 
     private String productIcon;
-
-    private Integer productStatus;
-
-    private Integer categoryType;
 
 }

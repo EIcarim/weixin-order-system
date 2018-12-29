@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
  */
 import java.util.List;
 
-@Repository
+
 public interface ProductInfoDao extends JpaRepository<ProductInfo,String>,JpaSpecificationExecutor<ProductInfo> {
 
     List<ProductInfo> findByProductStatus (Integer productStatus);

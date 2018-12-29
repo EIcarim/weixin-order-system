@@ -2,19 +2,17 @@ package com.hmtech.enums;
 
 import lombok.Getter;
 
-/**
- * 商品状态信息
- */
 @Getter
-public enum ProductStatusEnum {
+public enum PayStatusEnum {
 
-    UP(0, "在架"),
-    DOWN(1, "下架");
+    WAIT(0, "等待支付"),
+    SUCCESS(1,"支付成功")
+    ;
 
     private Integer status;
     private String msg;
 
-    ProductStatusEnum(Integer status, String msg) {
+    PayStatusEnum(Integer status, String msg) {
         this.status = status;
         this.msg = msg;
     }

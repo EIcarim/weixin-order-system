@@ -1,6 +1,7 @@
 package com.hmtech.service;
 
 import com.hmtech.domain.ProductInfo;
+import com.hmtech.dto.CartDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -18,6 +19,10 @@ public interface ProductInfoService {
     List<ProductInfo> findUpAll();
 
     void save(ProductInfo productInfo);
+
+    void increaseStock(List<CartDTO> cartDTOList);
+
+    void decreaseStock(List<CartDTO> cartDTOList);
 
 
 }
