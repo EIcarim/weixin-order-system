@@ -15,4 +15,5 @@ public interface ProductInfoDao extends JpaRepository<ProductInfo,String>,JpaSpe
 
     List<ProductInfo> findByProductStatus (Integer productStatus);
 
+
 }

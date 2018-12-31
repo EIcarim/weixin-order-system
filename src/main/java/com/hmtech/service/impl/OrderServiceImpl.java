@@ -3,7 +3,6 @@ package com.hmtech.service.impl;
 import com.hmtech.converter.OrderMaster2OrderDTO;
 import com.hmtech.dao.OrderDetailDao;
 import com.hmtech.dao.OrderMasterDao;
-import com.hmtech.dao.ProductInfoDao;
 import com.hmtech.domain.OrderDetail;
 import com.hmtech.domain.OrderMaster;
 import com.hmtech.domain.ProductInfo;
@@ -14,25 +13,20 @@ import com.hmtech.enums.PayStatusEnum;
 import com.hmtech.enums.ResultEnum;
 import com.hmtech.exception.SellException;
 import com.hmtech.service.OrderService;
-import com.hmtech.service.ProductInfoService;
+import com.hmtech.service.ProductService;
 import com.hmtech.utils.KeyUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.weaver.ast.Or;
-import org.hibernate.criterion.Order;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ReflectionUtils;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,7 +35,7 @@ import java.util.stream.Collectors;
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
-    private ProductInfoService productInfoService;
+    private ProductService productService;
 
     @Autowired
     private OrderDetailDao orderDetailDao;
@@ -57,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
         List<OrderDetail> orderDetailList = orderDTO.getOrderDetailList();
         //查询商品信息
         for (OrderDetail orderDetail : orderDetailList) {
-            ProductInfo productInfo = productInfoService.findOne(orderDetail.getProductId());
+            ProductInfo productInfo = productService.findOne(orderDetail.getProductId());
             if (productInfo == null) {
                 throw new SellException(ResultEnum.PRODUCT_NOT_EXIST);
             }
@@ -84,7 +78,7 @@ public class OrderServiceImpl implements OrderService {
                 new CartDTO(e.getProductId(), e.getProductQuantity())
         ).collect(Collectors.toList());
 
-        productInfoService.decreaseStock(cartDTOList);
+        productService.decreaseStock(cartDTOList);
 
         return orderDTO;
     }
@@ -144,7 +138,7 @@ public class OrderServiceImpl implements OrderService {
                 new CartDTO(e.getProductId(), e.getProductQuantity())
         ).collect(Collectors.toList());
 
-        productInfoService.increaseStock(cartDTOList);
+        productService.increaseStock(cartDTOList);
 
         //如果已支付,退款
         if (orderDTO.getPayStatus().equals(PayStatusEnum.SUCCESS.getStatus())) {
@@ -196,5 +190,12 @@ public class OrderServiceImpl implements OrderService {
             throw new SellException(ResultEnum.ORDER_UPDATE_FAIL);
         }
         return orderDTO;
+    }
+
+    @Override
+    public Page<OrderDTO> findList(Pageable pageable) {
+        Page<OrderMaster> orderMasterPage = orderMasterDao.findAll(pageable);
+        List<OrderDTO> orderDTOList = OrderMaster2OrderDTO.converter(orderMasterPage.getContent());
+        return new PageImpl<OrderDTO>(orderDTOList, pageable, orderMasterPage.getTotalElements());
     }
 }

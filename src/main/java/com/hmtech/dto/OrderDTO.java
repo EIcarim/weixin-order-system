@@ -1,10 +1,11 @@
 package com.hmtech.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.hmtech.domain.OrderDetail;
 import com.hmtech.enums.OrderStatusEnum;
 import com.hmtech.enums.PayStatusEnum;
+import com.hmtech.utils.EnumUtil;
 import com.hmtech.utils.serializer.Date2LongSerializer;
 import lombok.Data;
 
@@ -39,4 +40,14 @@ public class OrderDTO {
     private Date updateTime;
 
     private List<OrderDetail> orderDetailList;
+
+    @JsonIgnore
+    public OrderStatusEnum getOrderStatusEnum() {
+        return EnumUtil.getByStatus(orderStatus, OrderStatusEnum.class);
+    }
+
+    @JsonIgnore
+    public PayStatusEnum getPayStatusEnum() {
+        return EnumUtil.getByStatus(payStatus, PayStatusEnum.class);
+    }
 }

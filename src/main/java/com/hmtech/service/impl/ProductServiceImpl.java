@@ -6,7 +6,7 @@ import com.hmtech.dto.CartDTO;
 import com.hmtech.enums.ProductStatusEnum;
 import com.hmtech.enums.ResultEnum;
 import com.hmtech.exception.SellException;
-import com.hmtech.service.ProductInfoService;
+import com.hmtech.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class ProductInfoServiceImpl implements ProductInfoService {
+public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductInfoDao productInfoDao;
@@ -38,8 +38,8 @@ public class ProductInfoServiceImpl implements ProductInfoService {
     }
 
     @Override
-    public void save(ProductInfo productInfo) {
-        productInfoDao.save(productInfo);
+    public ProductInfo save(ProductInfo productInfo) {
+        return productInfoDao.save(productInfo);
     }
 
     @Override
@@ -71,5 +71,31 @@ public class ProductInfoServiceImpl implements ProductInfoService {
             productInfo.setProductStock(result);
             productInfoDao.save(productInfo);
         }
+    }
+
+    @Override
+    public ProductInfo onSale(String productId) {
+        ProductInfo productInfo = productInfoDao.findOne(productId);
+        if (productInfo == null) {
+            throw new SellException(ResultEnum.PRODUCT_NOT_EXIST);
+        }
+        if (productInfo.getProductStatus().equals(ProductStatusEnum.UP.getStatus())) {
+            throw new SellException(ResultEnum.PRODUCT_STATUS_ERROR);
+        }
+        productInfo.setProductStatus(ProductStatusEnum.UP.getStatus());
+        return productInfoDao.save(productInfo);
+    }
+
+    @Override
+    public ProductInfo offSale(String productId) {
+        ProductInfo productInfo = productInfoDao.findOne(productId);
+        if (productInfo == null) {
+            throw new SellException(ResultEnum.PRODUCT_NOT_EXIST);
+        }
+        if (productInfo.getProductStatus().equals(ProductStatusEnum.DOWN.getStatus())) {
+            throw new SellException(ResultEnum.PRODUCT_STATUS_ERROR);
+        }
+        productInfo.setProductStatus(ProductStatusEnum.DOWN.getStatus());
+        return productInfoDao.save(productInfo);
     }
 }

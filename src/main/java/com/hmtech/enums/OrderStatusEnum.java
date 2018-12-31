@@ -6,11 +6,11 @@ import lombok.Getter;
  * 订单状态信息
  */
 @Getter
-public enum OrderStatusEnum {
+public enum OrderStatusEnum implements StatusEnum {
 
     NEW(0,"新订单"),
     FINISHED(1, "完结"),
-    CANCEL(2,"取消")
+    CANCEL(2,"已取消")
     ;
 
     private Integer status;

@@ -2,6 +2,7 @@ package com.hmtech.service;
 
 import com.hmtech.domain.ProductInfo;
 import com.hmtech.dto.CartDTO;
+import com.hmtech.enums.ProductStatusEnum;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -10,7 +11,7 @@ import org.springframework.data.domain.Pageable;
  */
 import java.util.List;
 
-public interface ProductInfoService {
+public interface ProductService {
 
     Page<ProductInfo> findAll(Pageable pageable);
 
@@ -18,11 +19,14 @@ public interface ProductInfoService {
 
     List<ProductInfo> findUpAll();
 
-    void save(ProductInfo productInfo);
+    ProductInfo save(ProductInfo productInfo);
 
     void increaseStock(List<CartDTO> cartDTOList);
 
     void decreaseStock(List<CartDTO> cartDTOList);
 
+    ProductInfo onSale(String productId);
+
+    ProductInfo offSale(String productId);
 
 }

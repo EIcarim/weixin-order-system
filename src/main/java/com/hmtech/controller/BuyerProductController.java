@@ -3,7 +3,7 @@ package com.hmtech.controller;
 import com.hmtech.domain.ProductCategory;
 import com.hmtech.domain.ProductInfo;
 import com.hmtech.service.ProductCategoryService;
-import com.hmtech.service.ProductInfoService;
+import com.hmtech.service.ProductService;
 import com.hmtech.utils.ResultVOUtil;
 import com.hmtech.vo.ProductInfoVO;
 import com.hmtech.vo.ProductVO;
@@ -26,13 +26,13 @@ public class BuyerProductController {
     private ProductCategoryService productCategoryService;
 
     @Autowired
-    private ProductInfoService productInfoService;
+    private ProductService productService;
 
     @GetMapping("/list")
     public ResultVO list(){
 
         //查询所有上架商品
-        List<ProductInfo> productInfoList = productInfoService.findUpAll();
+        List<ProductInfo> productInfoList = productService.findUpAll();
 
         //根据上架商品查询商品分类集合
         List<Integer> categrotyTypeList = productInfoList.stream().map(e -> e.getCategoryType()).collect(Collectors.toList());
